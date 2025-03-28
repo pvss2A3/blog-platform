@@ -1,8 +1,13 @@
+.DS_Store
 node_modules/
 *.pem
 terraform/terraform.tfstate
 terraform/terraform.tfstate.backup
 terraform/.terraform/
 terraform/.terraform.lock.hcl
-.idea/
 terraform/.idea
+frontend/package-lock.json
+frontend/.DS_Store
+terraform/modules/.DS_Store
+frontend/src/.DS_Store
+.idea
