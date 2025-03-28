@@ -10,29 +10,33 @@ This project demonstrates a full-stack application deployed on AWS:
 - **Database**: PostgreSQL on AWS RDS.
 
 ## Project Structure
-blog-platform/
-|-- terraform/          # Terraform configuration files
-|   |-- main.tf         # Main infrastructure setup
-|   |-- variables.tf    # Variable definitions
-|   |-- outputs.tf      # Outputs (e.g., EC2 IP, RDS endpoint)
-|   |__ modules/        # Reusable Terraform modules
-|       |-- ec2/        # EC2 instance setup
-|       |-- rds/        # RDS database setup
-|       |-- s3/         # S3 bucket setup
-|       |__ vpc/        # VPC, subnets, and security groups
-|-- backend/            # Backend code
-|   |__ server.js       # Node.js server with API endpoints
-|-- frontend/           # Frontend React app
-|   |-- src/            # React source files
-|   |   |-- App.js      # Main React component
-|   |   |-- index.js    # React entry point
-|   |   |__ App.css     # Styling for App.js
-|   |-- public/         # Public assets
-|   |   |-- index.html  # HTML template
-|   |   |__ manifest.json # Web manifest
-|   |__ package.json    # Frontend dependencies
-|___ .gitignore          # Ignored files (e.g., node_modules/)
-|___ README.md           # This file
+
+| Path                        | Description                          |
+|-----------------------------|--------------------------------------|
+| `blog-platform/`            | Project root directory              |
+| `terraform/`                | Terraform configuration files       |
+| `terraform/main.tf`         | Main infrastructure setup           |
+| `terraform/variables.tf`    | Variable definitions                |
+| `terraform/outputs.tf`      | Outputs (e.g., EC2 IP, RDS endpoint)|
+| `terraform/modules/`        | Reusable Terraform modules          |
+| `terraform/modules/ec2/`    | EC2 instance setup                  |
+| `terraform/modules/rds/`    | RDS database setup                  |
+| `terraform/modules/s3/`     | S3 bucket setup                     |
+| `terraform/modules/vpc/`    | VPC, subnets, and security groups   |
+| `backend/`                  | Backend code                        |
+| `backend/server.js`         | Node.js server with API endpoints   |
+| `frontend/`                 | Frontend React app                  |
+| `frontend/src/`             | React source files                  |
+| `frontend/src/App.js`       | Main React component                |
+| `frontend/src/index.js`     | React entry point                   |
+| `frontend/src/App.css`      | Styling for App.js                  |
+| `frontend/public/`          | Public assets                       |
+| `frontend/public/index.html`| HTML template                       |
+| `frontend/public/manifest.json` | Web manifest                   |
+| `frontend/package.json`     | Frontend dependencies and scripts   |
+| `.gitignore`                | Ignored files (e.g., node_modules/) |
+| `LICENSE`                   | MIT License                         |
+| `README.md`                 | Project documentation               |
 
 
 ## Prerequisites
