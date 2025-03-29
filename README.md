@@ -36,6 +36,16 @@ This project demonstrates a full-stack application deployed on AWS:
 - [**LICENSE**](/LICENSE) - MIT License
 - [**README.md**](/README.md) - Project documentation
 
+## Architecture
+```mermaid
+graph TD
+    A[User] -->|HTTP| B[EC2: Node.js + React]
+    B -->|SQL| C[RDS: PostgreSQL]
+    B -->|Static Files| D[S3 Bucket]
+    E[Terrraform] -->|Provisions| B
+    E -->|Provisions| C
+    E -->|Provisions| D
+```
 
 ## Prerequisites
 - **AWS Account**: Access to AWS (e.g., AWS Academy Lab or personal account).
@@ -45,6 +55,19 @@ This project demonstrates a full-stack application deployed on AWS:
 - **Local Terminal**: For running commands.
 
 ## Setup Instructions
+  
+#### Setup Flowchart
+```mermaid
+flowchart TD
+    A[Clone Repo] --> B(Configure Terraform)
+    B -->|terraform apply| C(EC2, RDS, S3)
+    C --> D(SSH to EC2)
+    D --> E(Setup PostgreSQL)
+    E --> F(Restart Backend)
+    F --> G(Build Frontend Locally)
+    G -->|scp to EC2| H(Restart Server)
+    H --> I(App Live)
+```
 
 ### 1. Clone the Repository
     git clone https://github.com/pvss2A3/blog-platform.git
@@ -99,22 +122,24 @@ Replace ***<your-key.pem>*** with your .pem file name and ***\<EC2-PUBLIC-IP>***
 - Enter your db_password.
 
 #### 4. Create Database and Tables:
-    CREATE DATABASE blog_platform;
-    \c blog_platform
-    CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-    CREATE TABLE posts (
-    id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id),
-    title VARCHAR(100) NOT NULL,
-    content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-    \q
+```sql
+CREATE DATABASE blog_platform;
+\c blog_platform
+CREATE TABLE users (
+id SERIAL PRIMARY KEY,
+username VARCHAR(50) UNIQUE NOT NULL,
+password VARCHAR(255) NOT NULL,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE posts (
+id SERIAL PRIMARY KEY,
+user_id INT REFERENCES users(id),
+title VARCHAR(100) NOT NULL,
+content TEXT NOT NULL,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+\q
+```
 
 ### 4. Deploy the Backend
 
