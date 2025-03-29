@@ -141,7 +141,7 @@ Replace <your-key.pem> and <EC2-PUBLIC-IP> with your values.
 
 ### Troubleshooting
 - **Terraform Errors:** Check AWS credentials and permissions. 
-- **SSH Fails:** Ensure "app_sg" allows port 22 from your IP and the key pair matches. 
+- **SSH Fails:** Ensure "app_sg" allows port 22 from your IP and that the key pair matches. 
 - **Empty Reply:** Run node "server.js" in foreground on EC2 to see logs. 
 - **Blank Page:** Check browser console (F12) for frontend errors.
 
@@ -163,4 +163,4 @@ Replace <your-key.pem> and <EC2-PUBLIC-IP> with your values.
 5. Open a pull request.
 
 ### License
-This project is licensed under the . See the **LICENSE** file for details.
+This project is licensed under the MIT License. See the [**LICENSE**](/LICENSE) file for details.
