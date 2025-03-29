@@ -65,9 +65,8 @@ This project demonstrates a full-stack application deployed on AWS:
                 }
 #### 4. Apply Terraform:
     terraform plan
-- When prompted provide db_password with a secure password.
-
-    terraform apply 
+    terraform apply
+    
 - When prompted for db_password provide with a secure password.
 - Type **yes** if you agree with the changes and wait for 10-15 mins.
 - Note outputs: ec2_public_ip, rds_endpoint etc.
