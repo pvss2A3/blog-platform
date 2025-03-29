@@ -11,38 +11,37 @@ This project demonstrates a full-stack application deployed on AWS:
 
 ## Project Structure
 
-- **Root**: `blog-platform/` - Project root directory
-- **terraform/** - Terraform configuration files
-  - `main.tf` - Main infrastructure setup
-  - `variables.tf` - Variable definitions
-  - `outputs.tf` - Outputs (e.g., EC2 IP, RDS endpoint)
-  - `modules/` - Reusable Terraform modules
-    - `ec2/` - EC2 instance setup
-    - `rds/` - RDS database setup
-    - `s3/` - S3 bucket setup
-    - `vpc/` - VPC, subnets, and security groups
-- **backend/** - Backend code
-  - `server.js` - Node.js server with API endpoints
-- **frontend/** - Frontend React app
-  - `src/` - React source files
-    - `App.js` - Main React component
-    - `index.js` - React entry point
-    - `App.css` - Styling for App.js
-  - `public/` - Public assets
-    - `index.html` - HTML template
-    - `manifest.json` - Web manifest
-  - `package.json` - Frontend dependencies and scripts
-- **.gitignore** - Ignored files (e.g., node_modules/)
-- **LICENSE** - MIT License
-- **README.md** - Project documentation
+- **Root**: [`blog-platform/`](/) - Project root directory
+- [**terraform/**](/terraform) - Terraform configuration files
+  - [`main.tf`](/terraform/main.tf) - Main infrastructure setup
+  - [`variables.tf`](/terraform/variables.tf) - Variable definitions
+  - [`outputs.tf`](/terraform/outputs.tf) - Outputs (e.g., EC2 IP, RDS endpoint)
+  - [`modules/`](/terraform/modules/) - Reusable Terraform modules
+    - [`ec2/`](/terraform/modules/ec2) - EC2 instance setup
+    - [`rds/`](/terraform/modules/rds) - RDS database setup
+    - [`s3/`](/terraform/modules/s3_cloudfront) - S3 bucket setup
+    - [`vpc/`](/terraform/modules/vpc) - VPC, subnets, and security groups
+- [**backend/**](/backend/) - Backend code
+  - [`server.js`](/backend/server.js) - Node.js server with API endpoints
+- [**frontend/** ](/frontend/)- Frontend React app
+  - [`src/`](/frontend/src/) - React source files
+    - [`App.js`](/frontend/src/App.js) - Main React component
+    - [`index.js`](/frontend/src/index.js) - React entry point
+    - [`App.css`](App.css) - Styling for App.js
+  - [`public/`](/frontend/public/) - Public assets
+    - [`index.html`](/frontend/public/index.html) - HTML template
+    - [`manifest.json`](/frontend/public/manifest.json) - Web manifest
+  - [`package.json`](/frontend/package.json) - Frontend dependencies and scripts
+- [**.gitignore**](/.gitignore) - Ignored files (e.g., node_modules/)
+- [**LICENSE**](/LICENSE) - MIT License
+- [**README.md**](/README.md) - Project documentation
 
 
 ## Prerequisites
 - **AWS Account**: Access to AWS (e.g., AWS Academy Lab or personal account).
 - **Terraform**: Installed locally (`terraform -v` to check).
 - **Node.js**: Installed locally (`node -v` to check).
-- **Git**: Installed locally (`git --version` to check).
-- **SSH Key**: An AWS key pair (e.g., `KeyPair.pem`) for EC2 access.
+- **Git**: Installed locally (`git --version` to check).   <!-- **SSH Key**: An AWS key pair (e.g., `KeyPair.pem`) for EC2 access.-->
 - **Local Terminal**: For running commands.
 
 ## Setup Instructions
@@ -58,11 +57,14 @@ This project demonstrates a full-stack application deployed on AWS:
     terraform init
 #### 3. Review Variables:
 - Open **variables.tf** and adjust if needed (e.g., **region, db_password**).
-  - Example :   variable "db_password" {
-                description = "RDS database password"
-                type        = string
-                sensitive   = true
-                }
+  - **Example:**
+    ```hcl
+    variable "db_password" {
+      description = "RDS database password"
+      type        = string
+      sensitive   = true
+      }
+
 #### 4. Apply Terraform:
     terraform plan
     terraform apply
@@ -72,9 +74,17 @@ This project demonstrates a full-stack application deployed on AWS:
 - Note outputs: ec2_public_ip, rds_endpoint etc.
 
 ### 3. Set Up the Database
+Before SSH into EC2, we need keypair.pem. This can be done in two ways.
+  - ***Option 1:*** Use Existing Key Pair: Go to ***AWS Console → EC2 → Key Pairs*** and note the name (e.g., LabKeyPair) and download the ***.pem*** file. Update terraform [ec2/main.tf](/terraform/modules/ec2/main.tf) by replacing with this ***.pem*** file name.
+  - ***Option 2:*** Create a Key Pair (if allowed): Use the following commands by replacing **<MyKeyPair>** with your preferred key pair name.
+  ```bash
+  aws ec2 create-key-pair --key-name <MyKeyPair> --query 'KeyMaterial' --output text > <MyKeyPair>.pem
+  chmod 400 <MyKeyPair>.pem
+```
+    
 #### 1. SSH into EC2:
     ssh -i <your-key.pem> ec2-user@<EC2-PUBLIC-IP>
-Replace <your-key.pem> and <EC2-PUBLIC-IP> with your values.
+Replace ***<your-key.pem>*** with your .pem file name and ***\<EC2-PUBLIC-IP>*** with your Terraform output (ec2_public_ip).
 
 #### 2. Install PostgreSQL Client (AL2023):
     sudo dnf install -y wget
@@ -85,7 +95,7 @@ Replace <your-key.pem> and <EC2-PUBLIC-IP> with your values.
 
 #### 3. Connect to RDS:
     psql -h <RDS-ENDPOINT> -U bloguser -d postgres
-- Replace <RDS-ENDPOINT> with your Terraform output (rds_endpoint). 
+- Replace ***\<RDS-ENDPOINT>*** with your Terraform output (rds_endpoint). 
 - Enter your db_password.
 
 #### 4. Create Database and Tables:
@@ -117,7 +127,7 @@ Replace <your-key.pem> and <EC2-PUBLIC-IP> with your values.
 
 #### 2. Test: 
     curl http://localhost:3000/api/posts
-**Expected:** [].
+***Expected:*** [].
 
 ### 5. Deploy the Frontend
 #### 1. Build Locally:
@@ -127,16 +137,18 @@ Replace <your-key.pem> and <EC2-PUBLIC-IP> with your values.
 
 #### 2. Upload to EC2:
     scp -i <your-key.pem> -r build/* ec2-user@<EC2-PUBLIC-IP>:/app/frontend/
+Replace ***<your-key.pem>*** with your .pem file name and ***\<EC2-PUBLIC-IP>*** with your Terraform output (ec2_public_ip).
 
 #### 3. Restart Server:
     ssh -i <your-key.pem> ec2-user@<EC2-PUBLIC-IP>
     cd /app
     pkill node
     node server.js &
+Replace ***<your-key.pem>*** with your .pem file name and ***\<EC2-PUBLIC-IP>*** with your Terraform output (ec2_public_ip).
 
 ### 6. Access the Application
 
-- Open a browser and visit: http://<EC2-PUBLIC-IP>:3000.
+- Open a browser and visit: `http://\<EC2-PUBLIC-IP>:3000` (Note: Replace ***\<EC2-PUBLIC-IP>*** with your Terraform output (ec2_public_ip)).
 - Register a user, log in, and create posts.
 
 ### Troubleshooting
